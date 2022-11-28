@@ -3,6 +3,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { CreateUserDto } from './dtos/create-user.dto';
+import { FindUserDto } from './dtos/find-user.dto';
 @Injectable()
 export class UsersService {
   constructor(
@@ -17,5 +18,13 @@ export class UsersService {
     })
 
     return this.repo.save(user);
+  }
+
+  findOneBy(queries: FindUserDto) {
+    const { email, password } = queries;
+    return this.repo.findOneBy({
+      email,
+      password
+    })
   }
 }
