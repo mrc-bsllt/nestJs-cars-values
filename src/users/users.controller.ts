@@ -1,14 +1,11 @@
 import { 
   Controller,
-  Get,
-  Query,
   Post,
-  Body,
-  NotFoundException
+  Body
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dtos/create-user.dto';
-import { FindUserDto } from './dtos/find-user.dto';
+import { User } from './user.entity';
 @Controller('auth')
 export class UsersController {
   constructor(private UsersService: UsersService) {}
@@ -18,14 +15,11 @@ export class UsersController {
     return this.UsersService.create(body)
   }
 
-  @Get('user')
-  async findUser(@Query() queries: FindUserDto) {
-    const user = await this.UsersService.findOneBy(queries)
-    
-    if(!user) {
-      return new NotFoundException('L\'utente non esiste')
-    }
+  @Post('user')
+  updateUser(@Body() body: Partial<User>) {
+    const { id } = body
+    delete body.id
 
-    return user
+    return this.UsersService.update(id, body)
   }
 }
