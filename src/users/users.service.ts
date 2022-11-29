@@ -12,10 +12,10 @@ export class UsersService {
 
   async create(body: CreateUserDto) {
     const { email, password } = body;
-    const userExist = await this.getUserByEmail(email)
 
+    const userExist = await this.getUserByEmail(email)
     if(userExist) {
-      return new ConflictException('L\'utente esiste già!')
+      throw new ConflictException('L\'utente esiste già!')
     }
 
     const user = this.repo.create({
