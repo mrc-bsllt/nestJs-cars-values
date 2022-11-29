@@ -1,7 +1,7 @@
 import {
   AfterInsert,
   AfterUpdate,
-  AfterRemove,
+  BeforeRemove,
   Entity,
   Column,
   PrimaryGeneratedColumn
@@ -29,7 +29,7 @@ export class User {
     console.log(`Modificato utente con id: ${this.id}`)
   }
 
-  @AfterRemove()
+  @BeforeRemove()
   logRemove() {
     console.log(`Rimosso utente con id: ${this.id}`)
   }

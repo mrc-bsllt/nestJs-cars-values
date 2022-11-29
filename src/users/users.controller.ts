@@ -1,11 +1,14 @@
 import { 
   Controller,
   Post,
-  Body
+  Patch,
+  Delete,
+  Body,
+  Param
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dtos/create-user.dto';
-import { User } from './user.entity';
+import { UpdateUserDto } from './dtos/update-user.dto';
 @Controller('auth')
 export class UsersController {
   constructor(private UsersService: UsersService) {}
@@ -15,11 +18,16 @@ export class UsersController {
     return this.UsersService.create(body)
   }
 
-  @Post('user')
-  updateUser(@Body() body: Partial<User>) {
-    const { id } = body
-    delete body.id
+  @Patch('user/:id')
+  updateUser(
+    @Param('id') id: string, 
+    @Body() body: UpdateUserDto
+  ) {
+    return this.UsersService.update(+id, body)
+  }
 
-    return this.UsersService.update(id, body)
+  @Delete('user/:id')
+  deleteUser(@Param('id') id: string) {
+    return this.UsersService.remove(+id)
   }
 }
