@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
+import * as bcrypt from 'bcrypt'
 
 @Injectable()
 export class UsersService {
@@ -15,7 +16,11 @@ export class UsersService {
       throw new NotFoundException('Utente non trovato!')
     }
 
+    if(body?.password) {
+      body.password = await bcrypt.hash(body.password, 12)
+    }
     Object.assign(user, body)
+
     return this.User.save(user)
   }
 
