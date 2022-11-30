@@ -1,17 +1,22 @@
-import { Injectable, ConflictException } from '@nestjs/common';
+import { 
+  Injectable, 
+  ConflictException,
+  NotFoundException
+} from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../users/user.entity';
-import { CreateUserDto } from '../users/dtos/create-user.dto';
+import { SignupUserDto } from '../users/dtos/signup-user.dto';
+import { SigninUserDto } from '../users/dtos/signin-user.dto';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(User) private repo: Repository<User>
+    @InjectRepository(User) private User: Repository<User>
   ) {}
 
-  async signup(body: CreateUserDto) {
+  async signup(body: SignupUserDto) {
     const { email, password } = body;
     const userExist = await this.getUserByEmail(email)
     if(userExist) {
@@ -20,16 +25,27 @@ export class AuthService {
 
     const hashedPassword = await bcrypt.hash(password, 12)
 
-    const user = this.repo.create({
+    const user = this.User.create({
       email,
       password: hashedPassword
     })
 
-    return this.repo.save(user);
+    return this.User.save(user);
+  }
+
+  async signin(body: SigninUserDto) {
+    const { email, password } = body
+    const user = await this.getUserByEmail(email)
+    if(!user) {
+      throw new NotFoundException('L\'utente non esiste!')
+    }
+
+    const isPasswordCorrect = await bcrypt.compare(password, user.password)
+    return isPasswordCorrect
   }
 
   private async getUserByEmail(email: string) {
-    const user = await this.repo.findOneBy({ email })
+    const user = await this.User.findOneBy({ email })
     return user
   }
 }
