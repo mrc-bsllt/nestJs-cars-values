@@ -1,6 +1,5 @@
 import { 
   Controller,
-  Post,
   Patch,
   Delete,
   Body,
@@ -14,18 +13,23 @@ import { UserDto } from './dtos/user.dto';
 @Controller('user')
 @Serialize(UserDto)
 export class UsersController {
-  constructor(private UsersService: UsersService) {}
+  constructor(private usersService: UsersService) {}
 
   @Patch(':id')
   updateUser(
     @Param('id') id: string, 
     @Body() body: UpdateUserDto
   ) {
-    return this.UsersService.update(+id, body)
+    return this.usersService.update(+id, body)
   }
 
   @Delete(':id')
   deleteUser(@Param('id') id: string) {
-    return this.UsersService.remove(+id)
+    return this.usersService.remove(+id)
+  }
+
+  @Delete()
+  deleteAll() {
+    return this.usersService.deleteAll()
   }
 }

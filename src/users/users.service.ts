@@ -6,25 +6,30 @@ import { User } from './user.entity';
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectRepository(User) private repo: Repository<User>
+    @InjectRepository(User) private User: Repository<User>
   ) {}
 
   async update(id: number, body: Partial<User>) {
-    const user = await this.repo.findOneBy({ id })
+    const user = await this.User.findOneBy({ id })
     if(!user) {
       throw new NotFoundException('Utente non trovato!')
     }
 
     Object.assign(user, body)
-    return this.repo.save(user)
+    return this.User.save(user)
   }
 
   async remove(id: number) {
-    const user = await this.repo.findOneBy({ id })
+    const user = await this.User.findOneBy({ id })
     if(!user) {
       throw new NotFoundException('Utente non trovato!')
     }
 
-    return this.repo.remove(user)
+    return this.User.remove(user)
+  }
+
+  async deleteAll() {
+    const users = await this.User.find()
+    return this.User.remove(users)
   }
 }
