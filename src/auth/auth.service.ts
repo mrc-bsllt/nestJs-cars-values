@@ -1,7 +1,8 @@
 import { 
   Injectable, 
   ConflictException,
-  NotFoundException
+  NotFoundException,
+  BadRequestException
 } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -41,7 +42,11 @@ export class AuthService {
     }
 
     const isPasswordCorrect = await bcrypt.compare(password, user.password)
-    return isPasswordCorrect
+    if(!isPasswordCorrect) {
+      throw new BadRequestException('Password non valida!')
+    }
+
+    return user
   }
 
   private async getUserByEmail(email: string) {
