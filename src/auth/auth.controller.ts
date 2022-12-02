@@ -1,6 +1,7 @@
 import { 
   Controller,
   Post,
+  Get,
   Body,
   Session
 } from '@nestjs/common'
@@ -8,19 +9,19 @@ import { AuthService } from './auth.service'
 import { SignupUserDto } from '../users/dtos/signup-user.dto'
 import { SigninUserDto } from '../users/dtos/signin-user.dto'
 import { Serialize } from '../interceptors/serialize.interceptor'
-import { UserDto } from '../users/dtos/user.dto'
+import { User } from '../users/user.entity'
 
 @Controller('auth')
-@Serialize(UserDto)
+@Serialize(User)
 export class AuthController {
-  constructor(private UsersService: AuthService) {}
+  constructor(private AuthService: AuthService) {}
 
   @Post('signup')
   async signup(
     @Body() body: SignupUserDto,
     @Session() session: any
   ) {
-    const user = await this.UsersService.signup(body)
+    const user = await this.AuthService.signup(body)
     session.userId = user.id
 
     return user
@@ -31,7 +32,7 @@ export class AuthController {
     @Body() body: SigninUserDto,
     @Session() session: any
   ) {
-    const user = await this.UsersService.signin(body)
+    const user = await this.AuthService.signin(body)
     session.userId = user.id
 
     return user
@@ -40,5 +41,14 @@ export class AuthController {
   @Post('signout')
   signout(@Session() session: any) {
     session.userId = null
+  }
+
+  @Get('chi-sono')
+  async chiSono(@Session() session: any) {
+
+    const { userId } = session
+    const user = await this.AuthService.chiSono(userId)
+    console.log(user)
+    return user
   }
 }

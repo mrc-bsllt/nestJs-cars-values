@@ -49,6 +49,15 @@ export class AuthService {
     return user
   }
 
+  async chiSono(id: number) {
+    if(!id) {
+      return 'Non c\'è nessuno loggato!'
+    }
+
+    const user = await this.User.findOneBy({ id })
+    return user
+  }
+
   private async getUserByEmail(email: string) {
     const user = await this.User.findOneBy({ email })
     return user

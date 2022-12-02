@@ -4,14 +4,14 @@ import {
   Delete,
   Body,
   Param
-} from '@nestjs/common';
-import { UsersService } from './users.service';
-import { UpdateUserDto } from './dtos/update-user.dto';
-import { Serialize } from '../interceptors/serialize.interceptor';
-import { UserDto } from './dtos/user.dto';
+} from '@nestjs/common'
+import { UsersService } from './users.service'
+import { UpdateUserDto } from './dtos/update-user.dto'
+import { Serialize } from '../interceptors/serialize.interceptor'
+import { User } from './user.entity'
 
 @Controller('user')
-@Serialize(UserDto)
+@Serialize(User)
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
