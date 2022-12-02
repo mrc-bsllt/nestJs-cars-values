@@ -17,8 +17,8 @@ export class AuthService {
     @InjectRepository(User) private User: Repository<User>
   ) {}
 
-  async signup(body: SignupUserDto) {
-    const { email, password } = body;
+  async signup(body: SignupUserDto): Promise<User | never> {
+    const { email, password } = body
     const userExist = await this.getUserByEmail(email)
     if(userExist) {
       throw new ConflictException('L\'utente esiste già!')
@@ -34,7 +34,7 @@ export class AuthService {
     return this.User.save(user);
   }
 
-  async signin(body: SigninUserDto) {
+  async signin(body: SigninUserDto): Promise<User | never> {
     const { email, password } = body
     const user = await this.getUserByEmail(email)
     if(!user) {
@@ -49,7 +49,7 @@ export class AuthService {
     return user
   }
 
-  async chiSono(id: number) {
+  async chiSono(id: number): Promise<User | string> {
     if(!id) {
       return 'Non c\'è nessuno loggato!'
     }
@@ -58,7 +58,7 @@ export class AuthService {
     return user
   }
 
-  private async getUserByEmail(email: string) {
+  private async getUserByEmail(email: string): Promise<User | null> {
     const user = await this.User.findOneBy({ email })
     return user
   }

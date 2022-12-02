@@ -20,7 +20,8 @@ export class AuthController {
   async signup(
     @Body() body: SignupUserDto,
     @Session() session: any
-  ) {
+  ): Promise<User> 
+  {
     const user = await this.AuthService.signup(body)
     session.userId = user.id
 
@@ -31,7 +32,8 @@ export class AuthController {
   async signin(
     @Body() body: SigninUserDto,
     @Session() session: any
-  ) {
+  ): Promise<User> 
+  {
     const user = await this.AuthService.signin(body)
     session.userId = user.id
 
@@ -39,16 +41,16 @@ export class AuthController {
   }
 
   @Post('signout')
-  signout(@Session() session: any) {
+  signout(@Session() session: any): void {
     session.userId = null
   }
 
   @Get('chi-sono')
-  async chiSono(@Session() session: any) {
+  async chiSono(@Session() session: any): Promise<User | string> {
 
     const { userId } = session
     const user = await this.AuthService.chiSono(userId)
-    console.log(user)
+    
     return user
   }
 }

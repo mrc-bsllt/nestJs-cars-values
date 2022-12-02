@@ -19,17 +19,18 @@ export class UsersController {
   updateUser(
     @Param('id') id: string, 
     @Body() body: UpdateUserDto
-  ) {
+  ): Promise<User>
+  {
     return this.usersService.update(+id, body)
   }
 
   @Delete(':id')
-  deleteUser(@Param('id') id: string) {
+  deleteUser(@Param('id') id: string): Promise<User> {
     return this.usersService.remove(+id)
   }
 
   @Delete()
-  deleteAll() {
+  deleteAll(): Promise<User[]> {
     return this.usersService.deleteAll()
   }
 }
