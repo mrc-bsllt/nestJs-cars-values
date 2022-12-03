@@ -1,16 +1,17 @@
 import { 
   Controller,
-  Request,
+  Req,
   Body,
   Post,
   UseGuards,
   Get
 } from '@nestjs/common'
+import { Request } from 'express'
 import { AuthService } from './auth.service'
 import { User } from '../users/user.entity'
 import { SignupUserDto } from '../users/dtos/signup-user.dto'
 import { Serialize } from '../interceptors/serialize.interceptor'
-import { AuthGuard } from '@nestjs/passport'
+import { LocalAuthGuard } from './local-auth.guard'
 
 @Controller('auth')
 @Serialize(User)
@@ -21,5 +22,11 @@ constructor(private authService: AuthService) {}
   signup(@Body() user: SignupUserDto): Promise<User> {
     const { email, password } = user
     return this.authService.signup(email, password)
+  }
+
+  @UseGuards(LocalAuthGuard)
+  @Post('login')
+  async login(@Req() req: Request) {
+    return req.user
   }
 }
