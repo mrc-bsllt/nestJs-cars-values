@@ -12,6 +12,7 @@ import { User } from '../users/user.entity'
 import { SignupUserDto } from '../users/dtos/signup-user.dto'
 import { Serialize } from '../interceptors/serialize.interceptor'
 import { LocalAuthGuard } from './local-auth.guard'
+import { JwtAuthGuard } from './jwt-auth.guard'
 
 @Controller('auth')
 @Serialize(User)
@@ -26,7 +27,13 @@ constructor(private authService: AuthService) {}
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Req() req: Request) {
+  login(@Req() req: Request) {
+    return this.authService.login(req.user as User)
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('profile')
+  getProfile(@Req() req: Request) {
     return req.user
   }
 }
