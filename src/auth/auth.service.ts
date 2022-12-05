@@ -22,7 +22,7 @@ export class AuthService {
       throw new BadRequestException('Utente non trovato!')
     }
 
-    const isPasswordCorrect = bcrypt.compare(password, user.password)
+    const isPasswordCorrect = await bcrypt.compare(password, user.password)
     if(!isPasswordCorrect) {
       throw new UnauthorizedException('La password non corrisponde!')
     }
@@ -43,8 +43,8 @@ export class AuthService {
   }
 
   async login(user: User) {
-    const payload = { email: user.email, sub: user.id }
-
+    const payload = { sub: user.id, email: user.email }
+    
     return {
       access_token: this.jwtService.sign(payload)
     }

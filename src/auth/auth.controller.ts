@@ -20,7 +20,8 @@ export class AuthController {
 constructor(private authService: AuthService) {}
 
   @Post('signup')
-  signup(@Body() user: SignupUserDto): Promise<User> {
+  signup(
+    @Body() user: SignupUserDto): Promise<User> {
     const { email, password } = user
     return this.authService.signup(email, password)
   }
