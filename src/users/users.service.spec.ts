@@ -3,7 +3,10 @@ import { UsersService } from './users.service'
 import { getRepositoryToken } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { User } from './user.entity'
-import { BadRequestException } from '@nestjs/common'
+import { 
+  BadRequestException,
+  ConflictException
+} from '@nestjs/common'
 
 describe('UsersService', () => {
   let service: UsersService
@@ -21,13 +24,15 @@ describe('UsersService', () => {
         {
           provide: getRepositoryToken(User),
           useValue: {
-            findOneBy: ({ id }) => {
-              const response = user.id === id ?
+            findOneBy: (value) => {
+              const field = value.id ? 'id' : 'email'
+              const response = user[field] === value[field] ?
                 user :
                 null
                 
               return Promise.resolve(response)
-            }
+            },
+            save: (user: Partial<User>) => Promise.resolve(user),
           }
         }
       ],
@@ -46,5 +51,24 @@ describe('UsersService', () => {
       service.updateUser(2, {})
     ).rejects
     .toBeInstanceOf(BadRequestException)
+  })
+
+  it('throws an error if the user changes the email to an existing one', async () => {
+    await expect(
+      service.updateUser(10, { email: 'test@mail.com' })
+    ).rejects
+    .toBeInstanceOf(ConflictException)
+  })
+
+  it('returns same user with the changed email', async () => {
+    const user = await service.updateUser(10, { email: 'new@mail.com' })
+    expect(user.id).toBe(10)
+    expect(user.email).not.toBe('test@mail.com')
+  })
+
+  it('returns same user with the changed password', async () => {
+    const user = await service.updateUser(10, { password: 'newpassword' })
+    expect(user.id).toBe(10)
+    expect(user.password).not.toBe('testpassword')
   })
 })
