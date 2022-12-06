@@ -1,4 +1,4 @@
 export class PayloadDto {
-  sub: number;
-  email: string;
+  sub: number
+  email: string
 }

@@ -6,9 +6,9 @@ import {
 
 export class SignupUserDto {
   @IsEmail()
-  email: string;
+  email: string
 
   @IsAlphanumeric()
   @MinLength(8)
-  password: string;
+  password: string
 }

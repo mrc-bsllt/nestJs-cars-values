@@ -8,10 +8,10 @@ import {
 export class UpdateUserDto {
   @IsEmail()
   @IsOptional()
-  email: string;
+  email: string
 
   @IsAlphanumeric()
   @MinLength(8)
   @IsOptional()
-  password: string;
+  password: string
 }

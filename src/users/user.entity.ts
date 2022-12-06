@@ -5,20 +5,20 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn
-} from 'typeorm';
+} from 'typeorm'
 import { Exclude } from 'class-transformer'
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: number
 
   @Column()
-  email: string;
+  email: string
   
   @Column()
   @Exclude()
-  password: string;
+  password: string
 
   // Hooks
   @AfterInsert()

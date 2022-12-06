@@ -5,8 +5,8 @@ import {
 
 export class SigninUserDto {
   @IsEmail()
-  email: string;
+  email: string
 
   @IsAlphanumeric()
-  password: string;
+  password: string
 }

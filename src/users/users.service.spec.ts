@@ -11,6 +11,10 @@ import {
 describe('UsersService', () => {
   let service: UsersService
   let repo: Repository<User>
+  interface FindOneByDto {
+    id?: keyof User & number
+    email?: keyof User & string
+  }
   const user = {
     id: 10,
     email: 'test@mail.com',
@@ -24,7 +28,7 @@ describe('UsersService', () => {
         {
           provide: getRepositoryToken(User),
           useValue: {
-            findOneBy: (value) => {
+            findOneBy: (value: FindOneByDto) => {
               const field = value.id ? 'id' : 'email'
               const response = user[field] === value[field] ?
                 user :

@@ -6,7 +6,7 @@ import {
   Req,
   UnauthorizedException,
   UseGuards
-} from '@nestjs/common';
+} from '@nestjs/common'
 import { User } from '../users/user.entity'
 import { Serialize } from '../interceptors/serialize.interceptor'
 import { UsersService } from './users.service'
