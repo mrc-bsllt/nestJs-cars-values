@@ -62,7 +62,7 @@ describe('UsersController', () => {
     expect(user.password).toBe('testpasswordnuova')
   })
 
-  it.only('throws an error if user is not authhorized', async () => {
+  it('throws an error if user is not authhorized', async () => {
     const req = {
       user: {
         id: 10
