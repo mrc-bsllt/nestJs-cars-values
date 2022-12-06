@@ -31,10 +31,4 @@ constructor(private authService: AuthService) {}
   login(@Req() req: Request) {
     return this.authService.login(req.user as User)
   }
-
-  @UseGuards(JwtAuthGuard)
-  @Get('profile')
-  getProfile(@Req() req: Request) {
-    return req.user
-  }
 }
