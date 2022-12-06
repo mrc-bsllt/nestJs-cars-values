@@ -8,6 +8,7 @@ import { User } from '../users/user.entity'
 import { UsersService } from '../users/users.service'
 import * as bcrypt from 'bcrypt'
 import { JwtService } from '@nestjs/jwt'
+import { LoginDto } from './dtos/login.dto'
 
 @Injectable()
 export class AuthService {
@@ -30,7 +31,7 @@ export class AuthService {
     return user
   }
 
-  async signup(email, password) {
+  async signup(email, password): Promise<User | never> {
     const userExist = await this.usersService.findOneByEmail(email)
     if(userExist) {
       throw new ConflictException('L\'utente esiste già!')
@@ -42,7 +43,7 @@ export class AuthService {
     return user
   }
 
-  async login(user: User) {
+  async login(user: User): Promise<LoginDto> {
     const payload = { sub: user.id, email: user.email }
     
     return {
