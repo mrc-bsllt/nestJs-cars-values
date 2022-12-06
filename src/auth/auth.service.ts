@@ -36,7 +36,7 @@ export class AuthService {
     if(userExist) {
       throw new ConflictException('L\'utente esiste già!')
     }
-
+    
     const hashedPassword = await bcrypt.hash(password, 12)
 
     const user = await this.usersService.saveNewUser(email, hashedPassword)
