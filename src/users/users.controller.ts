@@ -23,14 +23,14 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   updateUser(
     @Req() req: Request,
-    @Param('id') id: number,
+    @Param('id') id: string,
     @Body() payload: UpdateUserDto
   ): Promise<User | never> {
     const { id: userId } = req.user as User
     if(userId !== +id) {
-      throw new UnauthorizedException()
+      throw new UnauthorizedException('Non sei autorizzato!')
     }
 
-    return this.usersService.updateUser(id, payload)
+    return this.usersService.updateUser(+id, payload)
   }
 }
