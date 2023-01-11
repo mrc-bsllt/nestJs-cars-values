@@ -11,9 +11,11 @@ import { ReportsService } from './reports.service'
 import { CreateReportDto } from './dtos/create-report.dto'
 import { JwtAuthGuard } from '../auth/jwt-auth.guard'
 import { User } from '../users/user.entity'
+import { Serialize } from '../interceptors/serialize.interceptor'
 
 @Controller('reports')
 @UseGuards(JwtAuthGuard)
+@Serialize(User)
 export class ReportsController {
   constructor(private reportsService: ReportsService) {}
 
