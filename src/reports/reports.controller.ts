@@ -1,5 +1,6 @@
 import { 
   Controller,
+  Get,
   Post,
   Body,
   UseGuards,
@@ -12,16 +13,22 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard'
 import { User } from '../users/user.entity'
 
 @Controller('reports')
+@UseGuards(JwtAuthGuard)
 export class ReportsController {
   constructor(private reportsService: ReportsService) {}
 
   @Post()
-  @UseGuards(JwtAuthGuard)
   createReport(
     @Body() body: CreateReportDto,
     @Req() req: Request
   ) {
     const user = req.user as User
     return this.reportsService.createReport(body, user)
+  }
+
+  @Get()
+  getReports(@Req() req: Request) {
+    const { id: userId } = req.user as User
+    return this.reportsService.getReports(userId)
   }
 }

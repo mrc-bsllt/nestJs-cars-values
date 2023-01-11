@@ -10,7 +10,8 @@ import { User } from '../users/user.entity'
 @Injectable()
 export class ReportsService {
   constructor(
-    @InjectRepository(Report) private Report: Repository<Report>
+    @InjectRepository(Report) private Report: Repository<Report>,
+    @InjectRepository(User) private User: Repository<User>
   ) {}
 
   createReport(report: CreateReportDto, user: User) {
@@ -18,5 +19,18 @@ export class ReportsService {
     newReport.user = user
     
     return this.Report.save(newReport)
+  }
+
+  async getReports(userId: number) {
+    const user = await this.User.findOne(
+      { 
+        where: { 
+          id: userId 
+        },
+        relations: ['reports']
+      },
+    )
+
+    return user.reports
   }
 }
