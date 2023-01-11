@@ -11,6 +11,11 @@ const now = Date.now()
 const currentYear = new Date(now).getFullYear()
 
 export class CreateReportDto {
+  @IsNumber()
+  @Min(0)
+  @Max(100000, {
+    message: 'Errore custom! Si fa così!'
+  })
   price: number
 
   @IsString()  
