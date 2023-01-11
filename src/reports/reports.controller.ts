@@ -3,11 +3,13 @@ import {
   Post,
   Body,
   UseGuards,
+  Req,
 } from '@nestjs/common'
+import { Request } from 'express'
 import { ReportsService } from './reports.service'
 import { CreateReportDto } from './dtos/create-report.dto'
-import { Report } from './report.entity'
 import { JwtAuthGuard } from '../auth/jwt-auth.guard'
+import { User } from '../users/user.entity'
 
 @Controller('reports')
 export class ReportsController {
@@ -15,7 +17,11 @@ export class ReportsController {
 
   @Post()
   @UseGuards(JwtAuthGuard)
-  createReport(@Body() body: CreateReportDto) {
-    return this.reportsService.createReport(body)
+  createReport(
+    @Body() body: CreateReportDto,
+    @Req() req: Request
+  ) {
+    const user = req.user as User
+    return this.reportsService.createReport(body, user)
   }
 }
